@@ -5,21 +5,22 @@ class Plant:
             self._total_grow = 0
             self._total_age = 0
             self._total_show = 0
-        
+
         def display_stats(self) -> None:
             print('[Statics]')
-            print(f'grow: {self._total_grow} age: {self._total_age} show: {self._total_show}')
-    
+            print(f'grow: {self._total_grow} '
+                  f'age: {self._total_age} show: {self._total_show}')
+
     def __init__(self, name: str, height: float, days: int) -> None:
         self._name = name.capitalize()
         self._height = 0.0
         self._days = 0
-        self.Data = self.Data()
+        self.data = self.Data()
         self.set_height(height)
-        self.set_age(days)    
+        self.set_age(days)
 
     def show(self) -> None:
-        self.Data._total_show += 1
+        self.data._total_show += 1
         print(f"{self._name}: {self._height}cm, {self._days} days old")
 
     @staticmethod
@@ -38,7 +39,7 @@ class Plant:
             print(f"{self._name}: Error, height can't be negative")
             print("Height update rejected")
         else:
-            self.Data._total_grow += 1
+            self.data._total_grow += 1
             self._height = round(new_height, 2)
 
     def set_age(self, new_days: int) -> None:
@@ -46,7 +47,7 @@ class Plant:
             print(f"{self._name}: Error, age can't be negative")
             print("Age update rejected")
         else:
-            self.Data._total_age += 1
+            self.data._total_age += 1
             self._days = new_days
 
     def get_height(self) -> float:
@@ -83,14 +84,15 @@ class Tree(Plant):
         def __init__(self) -> None:
             super().__init__()
             self._total_shade = 0
-        
+
         def display_stats(self) -> None:
             super().display_stats()
             print(f'shade: {self._total_shade}')
-    
+
     def __init__(self, name, height, days, trunk_diameter: float) -> None:
         self._trunk_diameter = 0.0
         super().__init__(name, height, days)
+        self.data: Tree.Data = self.Data()
         self.set_trunk_diameter(trunk_diameter)
 
     def set_trunk_diameter(self, new_diameter: float) -> None:
@@ -108,7 +110,7 @@ class Tree(Plant):
         print(f'Diameter: {self._trunk_diameter}')
 
     def produce_shade(self) -> None:
-        self.Data._total_shade += 1
+        self.data._total_shade += 1
         print(f'[Asking the {self._name} to produce shade]')
         print('Tree Oak now produces a shade of 200.0cm long and 5.0cm wide.')
 
@@ -118,12 +120,11 @@ class Seed(Flower):
         self._seed = 0
         super().__init__(name, height, days, color)
 
-    def bloom(self) -> bool:
+    def bloom(self) -> None:
         print(f'{self._name} has not bloomed yet')
         print(f'[Asking the {self._name} to bloom]')
         self._seed = 20
         print(f'{self._name} is blooming beautifully!')
-
 
     def show(self) -> None:
         super().show()
@@ -135,8 +136,9 @@ class Seed(Flower):
     def set_seed(self, new_seed) -> None:
         self._seed = new_seed
 
-def visualizar_estadisticas(plant: Plant) -> None:
-    plant.Data.display_stats()
+
+def visualizar_estadisticas(self, plant: Plant) -> None:
+    self.plant.Data.display_stats()
 
 
 if __name__ == "__main__":
@@ -147,18 +149,18 @@ if __name__ == "__main__":
     print('\n=== Flower')
     flower = Flower('rose', 15.00, 10, 'red')
     flower.bloom()
-    flower.Data.display_stats()
+    flower.data.display_stats()
     print('\n=== Tree')
     tree = Tree('dak', 200, 365, 5.0)
-    tree.Data.display_stats()
+    tree.data.display_stats()
     tree.produce_shade()
-    tree.Data.display_stats()
+    tree.data.display_stats()
     print('\n=== Seed')
     seed = Seed('sunflower', 80, 45, 'yellow', 0)
     seed.show()
     seed.bloom()
-    seed.Data.display_stats()
+    seed.data.display_stats()
     print('\n=== Anonymous')
     anonymous = Plant.anonymous_plant()
     anonymous.show()
-    anonymous.Data.display_stats()
+    anonymous.data.display_stats()
