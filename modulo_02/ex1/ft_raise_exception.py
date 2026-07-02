@@ -26,5 +26,6 @@ def test_temperature() -> None:
             print('Error!')
     print('\nAll test completed - program didn\'t crash!')
 
+
 if __name__ == "__main__":
     test_temperature()
