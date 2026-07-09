@@ -10,7 +10,7 @@ if __name__ == "__main__":
         print('No arguments provided!')
     else:
         print(f'Arguments received: {arg - 1}')
-        for i in sys.argv:
+        for i in sys.argv[1:]:
             print(f'Argument {num}: {i}')
             num += 1
     print(f'Total arguments: {arg}')
