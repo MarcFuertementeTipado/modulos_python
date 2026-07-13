@@ -28,5 +28,10 @@ if __name__ == "__main__":
           f"{c1[0]} , {c1[1]} , {c1[2]}")
     print(f'Got a first tuple: {c1}')
     print(f'It includes: X={c1[0]}, Y={c1[1]}, Z={c1[2]}')
-    distance = calculate_dist(c1)
-    print(f'Distance to center: {round(distance, 4)}')
+    distance = round(calculate_dist(c1), 4)
+    print(f'Distance to center: {distance}')
+    c2 = get_player_pos()
+    print("\nEnter new coordinates as floats informat 'x,y,z': "
+          f"{c1[0]} , {c1[1]} , {c1[2]}")
+    distance = round(calculate_dist(c1, c2), 4)
+    print(f'Distance between the 2 sets of coordinates: {distance}')

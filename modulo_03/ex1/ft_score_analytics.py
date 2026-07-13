@@ -6,7 +6,7 @@ def show_scores(scores: list[int]) -> None:
     if len(scores) == 0:
         raise ValueError('No scores provided. Usage: '
                          './ft_score_analytics.py <score1> <score2> ...')
-    print(f'Scores processed: {scores}') 
+    print(f'Scores processed: {scores}')
     print(f'Total players: {len(scores)}')
     print(f'Total score: {sum(scores)}')
     print(f'Average score: {round(sum(scores) / len(scores), 2)}')
