@@ -3,15 +3,15 @@ import math
 
 
 def get_player_pos() -> None:
-    temp: float = []
-    for i in range(1, 4):
-        while True:
-            try:
-                temp.append(round(float(input(f'introduce {i}: ')), 2))
-                break
-            except ValueError:
-                print('Invalid syntax')
-    coord = (temp[0], temp[1], temp[2])
+    while True:
+        try:
+            text = input("Enter new coordinates as "
+                         "floats in format 'x,y,z': ")
+            cord = text.split(',')
+            coord = (float(cord[0]), float(cord[1]), float(cord[2]))
+            break
+        except ValueError:
+            print('Invalid syntax')
     return (coord)
 
 
