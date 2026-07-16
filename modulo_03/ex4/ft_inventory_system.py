@@ -40,7 +40,7 @@ if __name__ == "__main__":
     min_item: str = list(inventory.keys())[0]
     for item in inventory.keys():
         print(f'Item {item} represents '
-              f'{round((inventory[item] * 100 / total_values), 1)}')
+              f'{round((inventory[item] * 100 / total_values), 1)}%')
         if inventory[item] > inventory[max_item]:
             max_item = item
         if inventory[item] < inventory[min_item]:
