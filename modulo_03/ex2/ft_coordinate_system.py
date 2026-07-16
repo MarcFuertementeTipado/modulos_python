@@ -2,7 +2,7 @@
 import math
 
 
-def get_player_pos() -> None:
+def get_player_pos():
     while True:
         try:
             text = input("Enter new coordinates as "
