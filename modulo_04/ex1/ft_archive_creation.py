@@ -1,33 +1,34 @@
 #!/usr/bin/env python3
 import sys
-import typing
 
 
-def transform_archivo(in_contenido: str):
-    contenido = in_contenido.splitlines()
-    print('Transform data:')
-    print('---\n')
-    for linea in contenido:
+def transform_data(data: str):
+    f = open(data, 'r')
+    contenido = f.read()
+    lineas = contenido.splitlines()
+    print('\nTransform Data:\n---\n')
+    for linea in lineas:
         linea = linea + '#'
         print(linea)
-    print('\n---\n')
-    name_file = input('Enter new file name(or empty):')
-    if name_file:
-        print(f'Saving data to {name_file}')
-        archivo_escritura = open(name_file, 'w')
-        for linea in contenido:
-            linea = linea + '#\n'
-            archivo_escritura.write(linea)
-        archivo_escritura.close()
-        print(f"Data saved in file '{name_file}'")
+    print('---\n')
+    name = input('Enter new file name (or empty):')
+    if name:
+        new_file = open(name, 'w')
+        for linea in lineas:
+            new_file.write(linea + '#\n')
+        print(f"Saving data to '{name}'")
+    new_file.close()
+    print('Data saved in file')
 
 
-def leer_archivo(archivo: typing.IO):
-    contenido = archivo.read()
+def print_file(txt: str):
+    f = open(txt, 'r')
+    contenido = f.read()
     print('---\n')
     print(contenido)
-    print('\n---\n')
-    contenido = transform_archivo(contenido)
+    print('---\n')
+    f.close()
+    print(f"File '{txt}' closed.")
 
 
 def main():
@@ -37,10 +38,8 @@ def main():
     try:
         print('=== Cyber Archives Recovery ===')
         print(f"Accessing file {sys.argv[1]}")
-        archivo_abierto = open(sys.argv[1], 'r')
-        leer_archivo(archivo_abierto)
-        archivo_abierto.close()
-        print(f"File '{sys.argv[1]}' closed.")
+        print_file(sys.argv[1])
+        transform_data(sys.argv[1])
     except FileNotFoundError as ex:
         print(f"Error opening file '{sys.argv[1]}': ", ex)
     except PermissionError as ex:
