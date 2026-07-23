@@ -4,7 +4,7 @@ from typing import Any
 
 
 class DataProcessor(ABC):
-    def __init__(self):
+    def __init__(self) -> None:
         self._items: list[str] = []
         self._rank_counter = -1
 
@@ -78,13 +78,12 @@ class LogProcessor(DataProcessor):
 
 
 class DataStream():
-    def __init__(self):
+    def __init__(self) -> None:
         self._processors: list[DataProcessor] = []
-        for subclass in DataProcessor.__subclasses__():
-            self._processors.append(subclass())
 
     def register_processor(self, proc: DataProcessor) -> None:
         self._processors.append(proc)
+        print(f'Registering {proc.__class__.__name__}')
 
     def process_stream(self, stream: list[Any]) -> None:
         for elem in stream:
@@ -111,12 +110,22 @@ class DataStream():
 def main() -> None:
     print('=== Code Nexus - Data Stream')
     print('=== DataStream statistics ===')
-    my_list = [[1, 'hello'], 'Hello world', [3.14, -1, 2.71],
+    ds = DataStream()
+    numeric = NumericProcessor()
+    ds.register_processor(numeric)
+    my_list = ['Hello world', [3.14, -1, 2.71],
                [{'log_level': 'WARNING', 'log_message': 'Use ssh instead'},
                 {'log_level': 'INFO', 'log_message': 'User wil isconnected'}],
                42, ['Hi', 'five']]
-    ds = DataStream()
     print(f'Send data on stream: {my_list}\n')
+    ds.process_stream(my_list)
+    ds.print_processors_stats()
+    print('\nSecon try, adding more types processors')
+    text = TextProcessor()
+    log = LogProcessor()
+    ds.register_processor(text)
+    ds.register_processor(log)
+    print('Resending list again...')
     ds.process_stream(my_list)
     ds.print_processors_stats()
     ds._processors[0].output()
