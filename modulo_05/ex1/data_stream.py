@@ -6,7 +6,7 @@ from typing import Any
 class DataProcessor(ABC):
     def __init__(self):
         self._items: list[str] = []
-        self.__rank_counter = -1
+        self._rank_counter = -1
 
     @abstractmethod
     def validate(self, data: Any) -> bool:
@@ -23,8 +23,8 @@ class DataProcessor(ABC):
     def output(self) -> tuple[str, int] | None:
         if not self._items:
             return None
-        self.__rank_counter += 1
-        return (self._items.pop(0), self.__rank_counter)
+        self._rank_counter += 1
+        return (self._items.pop(0), self._rank_counter)
 
 
 class NumericProcessor(DataProcessor):
@@ -99,16 +99,32 @@ class DataStream():
                       f"can't process element in stream: {elem}")
 
     def print_processors_stats(self) -> None:
-        for processor in self._processors:
-            print(processor.__class__.__name__)
-            print(processor._items)
+        for proc in self._processors:
+            print("=== DataStream statistics ===")
+            print(proc.__class__.__name__, end="")
+            print(f": total "
+                  f"{proc._rank_counter + 1 + len(proc._items)}"
+                  " items processed"
+                  f", remaining {len(proc._items)} on processor")
 
 
 def main() -> None:
     print('=== Code Nexus - Data Stream')
     print('=== DataStream statistics ===')
-    my_lista = [[1, 'hello'],'Hello world', [3.14, -1, 2.71], [{'log_level': 'WARNING', 'log_message': 'Telnet access! Use ssh instead'}, {'log_level': 'INFO', 'log_message': 'User wil isconnected'}], 42, ['Hi', 'five']]
+    my_list = [[1, 'hello'], 'Hello world', [3.14, -1, 2.71],
+               [{'log_level': 'WARNING', 'log_message': 'Use ssh instead'},
+                {'log_level': 'INFO', 'log_message': 'User wil isconnected'}],
+               42, ['Hi', 'five']]
     ds = DataStream()
-    ds.process_stream(my_lista)
+    print(f'Send data on stream: {my_list}\n')
+    ds.process_stream(my_list)
+    ds.print_processors_stats()
+    ds._processors[0].output()
+    ds._processors[1].output()
+    ds._processors[2].output()
+    print('\n   Removing 1 item from each processor...')
+    ds.print_processors_stats()
+
+
 if __name__ == "__main__":
     main()
