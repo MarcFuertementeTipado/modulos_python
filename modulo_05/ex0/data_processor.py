@@ -2,6 +2,7 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
+
 class DataProcessor(ABC):
     def __init__(self) -> None:
         self._items: list[str] = []
@@ -9,16 +10,14 @@ class DataProcessor(ABC):
 
     @abstractmethod
     def validate(self, data: Any) -> bool:
-        """Check wether the input 
-        data are appropriate for the current 
-        data processor"""
         pass
+
     @abstractmethod
     def ingest(self, data: Any) -> None:
         """process the input data"""
         if not self.validate(data):
             raise ValueError("Improper data")
-        
+
     def output(self) -> tuple[int, str] | None:
         if not self._items:
             return None
@@ -34,6 +33,7 @@ class NumericProcessor(DataProcessor):
             return all(isinstance(x, (int, float))for x in data)
         else:
             return False
+
     def ingest(self, data: int | float | list[int | float]) -> None:
         super().ingest(data)
         elementos = data if isinstance(data, list) else [data]
@@ -49,6 +49,7 @@ class TextProcessor(DataProcessor):
             return all(isinstance(x, str) for x in data)
         else:
             return False
+
     def ingest(self, data: str | list[str]) -> None:
         super().ingest(data)
         elemento = data if isinstance(data, list) else [data]
@@ -59,14 +60,14 @@ class TextProcessor(DataProcessor):
 class LogProcessor(DataProcessor):
     def validate(self, data: Any) -> bool:
         if isinstance(data, dict):
-            return all(isinstance(k, str) and isinstance(v, str)  for k, v in data.items())
+            return all(isinstance(k, str) and isinstance(v, str)
+                       for k, v in data.items())
         if isinstance(data, list):
             return all(isinstance(x, dict) for x in data)
         else:
             return False
 
-
-    def ingest(self, data: dict[str,str] | list[dict[str, str]]) -> None:
+    def ingest(self, data: dict[str, str] | list[dict[str, str]]) -> None:
         super().ingest(data)
         elementos = [data] if isinstance(data, dict) else data
         for elem in elementos:
@@ -75,11 +76,10 @@ class LogProcessor(DataProcessor):
         pass
 
 
-
 def main():
     print("=== Code Nexus - Data Processor ===\n")
 
-    #NUMERIC PROCESSOR TEST
+    # NUMERIC PROCESSOR TEST
     print("Testing Numeric Processor...")
     numeric = NumericProcessor()
     print(" Trying to validate input '42': ", end="")
@@ -87,10 +87,11 @@ def main():
     print(" Trying to validate input 'Hello': ", end="")
     print(numeric.validate("Hello"))
     try:
-        print(" Test invalid ingestion of string 'foo' without prior validation:")
+        print(" Test invalid ingestion of string 'foo' "
+              "without prior validation:")
         numeric.ingest("foo")
     except ValueError as ex:
-        print(" Got exception: ",ex)
+        print(" Got exception: ", ex)
     num_list = [1, 2, 3, 4, 5]
     numeric.ingest(num_list)
     print(" Processing data: ", num_list)
@@ -98,9 +99,7 @@ def main():
     for i in range(1, 4):
         num_tupla = numeric.output()
         print(f" Numeric values {num_tupla[0]}: ", num_tupla[1])
-
-
-    #TEXT PROCESSOR TEST
+    # TEXT PROCESSOR TEST
     print("\nTesting Text Processor...")
     text = TextProcessor()
     print(" Trying to validate input '42': ", end="")
@@ -111,20 +110,20 @@ def main():
     print(" Extracting 1 value ...")
     tex_tupla = text.output()
     print(f" Text value {tex_tupla[0]}: {tex_tupla[1]}")
-
-
-    #LOG PROCESSOR TEST
+    # LOG PROCESSOR TEST
     print("\nTesting Log Porcessor...")
     log = LogProcessor()
     print(" Trying to validate input 'Hello': ", end="")
     print(log.validate('Hello'))
-    dic_list = [{'log_level': 'NOTICE', 'log_message': 'Connection to server'}, {'log_level': 'ERROR', 'log_message': 'Unauthorized access!!'}]
+    dic_list = [{'log_level': 'NOTICE', 'log_message': 'Connection to server'},
+                {'log_level': 'ERROR', 'log_message': 'Unauthorized access!!'}]
     log.ingest(dic_list)
     print(" Processing data: ", dic_list)
     print(" Extracting 2 values...")
     for i in range(1, 3):
         log_tupla = log.output()
         print(f" log entry {log_tupla[0]}: {log_tupla[1]}")
+
 
 if __name__ == "__main__":
     main()

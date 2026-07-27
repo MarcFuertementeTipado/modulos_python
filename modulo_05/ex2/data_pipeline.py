@@ -3,6 +3,11 @@ from abc import ABC, abstractmethod
 from typing import Any, Protocol
 
 
+class ExportPlugin(Protocol):
+    def process_output(self, data: list[tuple[int, str]]) -> None:
+        pass
+
+
 class DataProcessor(ABC):
     def __init__(self) -> None:
         self._items: list[str] = []
@@ -116,11 +121,6 @@ class DataStream():
             # Si hay elementos, los procesamos con el plugin
             if tuple_list:
                 plugin.process_output(tuple_list)
-
-
-class ExportPlugin(Protocol):
-    def process_output(self, data: list[tuple[int, str]]) -> None:
-        pass
 
 
 class CSVExport():
