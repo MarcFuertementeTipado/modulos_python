@@ -4,4 +4,4 @@ from .potions import healing_potion as heal
 from .potions import strength_potion
 from .transmutation import recipes
 
-__all__ = [create_air, heal, strength_potion, recipes]
+__all__ = ["create_air", "heal", "strength_potion", "recipes"]

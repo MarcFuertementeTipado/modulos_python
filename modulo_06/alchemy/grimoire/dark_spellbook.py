@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-from .light_validator import validate_ingredients
+from .dark_validator import validate_ingredients
 
 
-def light_spell_allowed_ingredients() -> list[str]:
-    return ["earth", "air", "fire", "water"]
+def dark_spell_allowed_ingredients() -> list[str]:
+    return ["bats", "frogs", "arsenic", "eyeball"]
 
 
-def light_spell_record(spell_name: str, ingredients: str) -> str:
+def dark_spell_record(spell_name: str, ingredients: str) -> str:
     validate = validate_ingredients(ingredients)
     if validate.find("VALID"):
         return f"{spell_name} recorded: Fantasy {validate}"
