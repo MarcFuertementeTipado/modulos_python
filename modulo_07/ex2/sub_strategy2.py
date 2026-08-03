@@ -12,7 +12,7 @@ class NormalStrategy(BS):
 
     def act(self, creature: cr.Creature) -> None:
         if self.is_valid(creature) is False:
-                    raise TypeError('Invalid, this is not a creature...')
+            raise TypeError('Invalid, this is not a creature...')
         print(creature.attack())
 
 
@@ -23,7 +23,7 @@ class AggressiveStrategy(BS):
         else:
             return False
 
-    def act(self, creature: cr.Creature) -> None:
+    def act(self, creature) -> None:
         if self.is_valid(creature) is False:
             raise TypeError('Invalid Creature for this agressive strategy')
         print(creature.transform())
@@ -38,8 +38,8 @@ class DefensiveStrategy(BS):
         else:
             return False
 
-    def act(self, creature: cr.Creature):
+    def act(self, creature):
         if self.is_valid(creature) is False:
-                    raise TypeError('Invalid Creature for this Defensive strategy')
+            raise TypeError('Invalid Creature for this Defensive strategy')
         print(creature.attack())
         print(creature.heal())

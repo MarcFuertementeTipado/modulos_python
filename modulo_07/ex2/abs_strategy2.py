@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from ex0 import creature
+from ex0.creature import Creature as creature
 
 
 class BattleStrategy(ABC):
@@ -10,4 +10,3 @@ class BattleStrategy(ABC):
     @abstractmethod
     def act(self, creature):
         pass
-
