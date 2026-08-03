@@ -27,4 +27,4 @@ class Creature(ABC):
         pass
 
     def describe(self) -> str:
-        return f"{self.get_name()} is a {self.get_typec()} Creature"
+        return f"{self.get_name()} is a {self.get_typec()} type Creature"
