@@ -2,7 +2,7 @@
 name = "loading"
 version = "0.1.0"
 description = "Matrix data loading and dependency management program"
-authors = ["42 Student <student@42barcelona.com>"]
+authors = ["Marc <mbosch@student.42barcelona.com>"]
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
