@@ -65,6 +65,7 @@ def main() -> None:
     x = np.linspace(0, 10, 1000)
     y = np.sin(x) + np.random.normal(0, 0.1, 1000)
 
+    # almaceno los datos creados en un DataFrame
     df = pd.DataFrame({
         'Time': x,
         'Signal': y
@@ -72,6 +73,7 @@ def main() -> None:
 
     print("Generating visualization...")
 
+    # creo el lienzo en blanco donde poner los datos
     plt.figure(figsize=(10, 6))
 
     # Dividimos los argumentos para respetar los 79 caracteres de Flake8

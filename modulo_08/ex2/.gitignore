@@ -1,0 +1,10 @@
+# Archivos de entorno y secretos
+.env
+
+# Entornos virtuales de Python (por si acaso)
+venv/
+__pycache__/
+*.pyc
+
+# Archivos generados por el programa
+matrix_analysis.png
