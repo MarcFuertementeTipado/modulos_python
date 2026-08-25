@@ -1,6 +1,6 @@
 import os
 import sys
-from dotenv import load_dotenv # type: ignore
+from dotenv import load_dotenv  # type: ignore
 
 # Variables obligatorias que el Oráculo necesita para despertar
 REQUIRED_CONFIGS = [

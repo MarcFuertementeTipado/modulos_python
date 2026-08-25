@@ -1,0 +1,97 @@
+from pydantic import BaseModel, Field, model_validator  # type: ignore
+from enum import Enum
+from datetime import datetime
+from data_generator import DataConfig, CrewMissionGenerator
+
+
+class crew_ranks(str, Enum):
+    CADET = "cadet"
+    OFFICER = "officer"
+    LIEUTENANT = "lieutenant"
+    CAPTAIN = "captain"
+    COMMANDER = "commander"
+
+
+class CrewMember(BaseModel):
+    member_id: str = Field(min_length=3, max_length=10)
+    name: str = Field(min_length=2, max_length=50)
+    rank: crew_ranks
+    age: int = Field(ge=18, le=80)
+    specialization: str = Field(min_length=3, max_length=30)
+    years_experience: int = Field(ge=0, le=50)
+    is_active: bool = Field(default=True)
+
+    def show(self):
+        print(f"--- 🧑‍🚀 Tripulante: {self.name} ---")
+        print(f"  - ID: {self.member_id}")
+        print(f"  - Rango: {self.rank}")
+        print(f"  - Edad: {self.age} años")
+        print(f"  - Especialización: {self.specialization}")
+        print(f"  - Experiencia: {self.years_experience} años")
+        print(f"  - Estado: {'🟢 Activo' if self.is_active else '🔴 Inactivo'}")
+        print("-" * 35)
+
+
+class SpaceMission(BaseModel):
+    mission_id: str = Field(min_length=5, max_length=15)
+    mission_name: str = Field(min_length=3, max_length=100)
+    destination: str = Field(min_length=3, max_length=50)
+    launch_date: datetime
+    duration_days: int = Field(ge=1, le=3650)
+    crew: list[CrewMember] = Field(min_length=1, max_length=12)
+    mission_status: str = Field(default="planned")
+    budget_millions: float = Field(ge=1.0, le=10000.0)
+
+    @model_validator(mode="after")
+    def validation_missionrules(self):
+        if not self.mission_id.startswith("M"):
+            raise ValueError(
+                "Mission ID must start with 'M'"
+            )
+
+        for member in self.crew:
+            if member.is_active == False:
+                raise ValueError(
+                    "All members must be active!"
+                )
+        return self
+
+    def show(self):
+      print(f"🚀 === MISIÓN ESPACIAL: {self.mission_name} ===")
+      print(f"  - ID de Misión: {self.mission_id}")
+      print(f"  - Destino: {self.destination}")
+      print(f"  - Fecha de Lanzamiento: {self.launch_date}")
+      print(f"  - Duración: {self.duration_days} días")
+      print(f"  - Estado: {self.mission_status.upper()}")
+      print(f"  - Presupuesto: ${self.budget_millions} millones")
+      print(f"  - Tripulación ({len(self.crew)} miembros):")
+      print("  " + "-" * 40)
+
+      # Recorremos la lista de tripulantes y llamamos a su propio show()
+      for miembro in self.crew:
+        # Añadimos una pequeña tabulación para que quede anidado visualmente
+        print("    ", end="")
+        miembro.show()
+
+      print("=" * 45)
+
+
+def main() -> None:
+    config = DataConfig()
+    # Generate mission data
+    mission_gen = CrewMissionGenerator(config)
+    missions = mission_gen.generate_mission_data(3)
+
+    print(f"\n🚀 Generated {len(missions)} space missions:")
+    for mission in missions:
+        try:
+            print(mission)
+            space_m = SpaceMission(**mission)
+            space_m.show()
+        except Exception as ex:
+            print(ex)
+
+
+
+if __name__ == "__main__":
+    main()
