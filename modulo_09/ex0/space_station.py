@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from pydantic import BaseModel, Field  # type: ignore
 from datetime import datetime
-from modulo_09.ex0.data_generator import DataConfig, SpaceStationGenerator
+from modulo_09.ex2.data_generator import DataConfig, SpaceStationGenerator
 
 
 class space_station(BaseModel):

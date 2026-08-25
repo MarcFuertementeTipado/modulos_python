@@ -44,16 +44,31 @@ class SpaceMission(BaseModel):
 
     @model_validator(mode="after")
     def validation_missionrules(self):
+        __is_commander: bool = False
+        __is_experienced: int = 0
         if not self.mission_id.startswith("M"):
             raise ValueError(
                 "Mission ID must start with 'M'"
             )
 
         for member in self.crew:
+            if member.rank == "commander":
+                __is_commander = True
             if member.is_active == False:
                 raise ValueError(
                     "All members must be active!"
                 )
+            if member.years_experience > 5:
+                __is_experienced += 1
+        if __is_commander == False:
+            raise ValueError(
+                "It is necessary at least 1 commander"
+            )
+        percent_experienced_crew = (100 *__is_experienced) / len(self.crew)
+        if self.duration_days > 365 and percent_experienced_crew < 50:
+            raise ValueError(
+                "Long missions (> 365 days) need 50percent experienced crew (5+ years)"
+            )
         return self
 
     def show(self):
@@ -80,7 +95,7 @@ def main() -> None:
     config = DataConfig()
     # Generate mission data
     mission_gen = CrewMissionGenerator(config)
-    missions = mission_gen.generate_mission_data(3)
+    missions = mission_gen.generate_mission_data(1)
 
     print(f"\n🚀 Generated {len(missions)} space missions:")
     for mission in missions:

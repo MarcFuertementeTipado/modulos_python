@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field, model_validator  # type: ignore
 from datetime import datetime
 from enum import Enum
-from modulo_09.ex0.data_generator import AlienContactGenerator, DataConfig  # type: ignore
+from modulo_09.ex2.data_generator import AlienContactGenerator, DataConfig  # type: ignore
 
 
 class contact_type(str, Enum):
