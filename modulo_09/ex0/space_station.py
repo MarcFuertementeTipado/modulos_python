@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from pydantic import BaseModel, Field  # type: ignore
 from datetime import datetime
-from modulo_09.ex2.data_generator import DataConfig, SpaceStationGenerator
+from data_generator import DataConfig, SpaceStationGenerator  # type: ignore
 
 
 class space_station(BaseModel):
@@ -37,7 +37,16 @@ def main() -> None:
     config = DataConfig()
     generator = SpaceStationGenerator(config)
 
-    datos_crudos = generator.generate_station_data(5)
+    datos_crudos = generator.generate_station_data(1)
+    dato_erroneos = {'station_id': 'LGW125',
+                     'name': 'Titan Mining Outpost',
+                     'crew_size': 26,  # mayor de 20 ERROR
+                     'power_level': 76.4,
+                     'oxygen_level': 95.5,
+                     'last_maintenance': '2023-07-11T00:00:00',
+                     'is_operational': True,
+                     'notes': None}
+    datos_crudos.append(dato_erroneos)
 
     for i, datos in enumerate(datos_crudos, 1):
         print(f"Datos a introducir: {datos}\n")

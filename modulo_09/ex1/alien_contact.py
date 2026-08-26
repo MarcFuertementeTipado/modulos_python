@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field, model_validator  # type: ignore
 from datetime import datetime
 from enum import Enum
-from modulo_09.ex2.data_generator import AlienContactGenerator, DataConfig  # type: ignore
+from data_generator import AlienContactGenerator, DataConfig  # type: ignore
 
 
 class contact_type(str, Enum):
@@ -28,7 +28,7 @@ class AlienContact(BaseModel):
             raise ValueError(
                 "ID must start with 'AC' name"
             )
-        if self.contact_type == "physical" and self.is_verified == False:
+        if self.contact_type == "physical" and self.is_verified is not True:
             raise ValueError(
                 "Physical contact reports must be verified"
             )
@@ -54,14 +54,26 @@ def main() -> None:
     # Generate alien contact data
     config = DataConfig()
     contact_gen = AlienContactGenerator(config)
-    contacts = contact_gen.generate_contact_data(6)
-        
+    contacts = contact_gen.generate_contact_data(1)
+
+    contat_error = {'contact_id': 'AC_2024_001',
+                    'timestamp': '2024-01-20T00:00:00',
+                    'location': 'Atacama Desert, Chile',
+                    'contact_type': 'physical',
+                    'signal_strength': 9.6,
+                    'duration_minutes': 99,
+                    'witness_count': 2,
+                    'message_received': 'Greetings from Zeta Reticuli',
+                    'is_verified': False}
+    contacts.append(contat_error)
+
     print(f"\n👽 Generated {len(contacts)} alien contacts:")
     for contact in contacts:
-        alien = AlienContact(**contact)
-        verified = "✅ Verified" if contact["is_verified"] else "❓ Unverified"
-        print(f"  {contact['contact_id']}: {contact['contact_type']} at {contact['location']} - {verified}")
-        alien.show()
+        try:
+            alien = AlienContact(**contact)
+            alien.show()
+        except ValueError as ex:
+            print(ex)
 
 
 if __name__ == "__main__":
